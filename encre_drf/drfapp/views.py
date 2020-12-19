@@ -19,7 +19,7 @@ def createUser(request):
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 
-        if User.objects.filter(email=serializer.validated_data['email']).first() is None:
+        if User.objects.filter(username=serializer.validated_data['username']).first() is None:
             serializer.save()
             return Response({"message": "ok"}, status=status.HTTP_201_CREATED)
 
@@ -34,8 +34,8 @@ def login(request):
 
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
-        if serializer.validated_data['email'] == "None":
-            return Resopnse({"message": "fail"}, status=status.HTTP_200_OK)
+        if serializer.validated_data['username'] == "None":
+            return Response({"message": "fail"}, status=status.HTTP_401_UNAUTHORIZED)
 
         response = {
             'success': 'True',

@@ -45,7 +45,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         help_text='EMAIL ID.'
     )
-    username = models.CharField(max_length=30)
+    username = models.CharField(
+        verbose_name=_('username id'),
+        max_length=30,
+        unique=True,
+        help_text='USERNAME ID.'
+        )
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -64,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
 
     class Meta:
         verbose_name = _('user')

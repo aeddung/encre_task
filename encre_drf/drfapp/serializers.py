@@ -24,21 +24,21 @@ class UserCreateSerializer(serializers.Serializer):
         user.set_password(validated_data['password'])
 
         user.save()
-        return user 
+        return user
 
 # 로그인 api
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=64)
+    username = serializers.CharField(max_length=30)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-        email = data.get("email", None)
+        username = data.get("username")
         password = data.get("password", None)
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is None:
-            return {'email': 'None'}
+            return {'username': 'None'}
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
             jwt_token = JWT_ENCODE_HANDLER(payload)
@@ -46,9 +46,9 @@ class UserLoginSerializer(serializers.Serializer):
 
         except User.DoesNotExist:
             raise serializers.ValidationError(
-                'User with given email and password does not exist'
+                'User with given username and password does not exist'
             )
         return {
-            'email': user.email,
+            'username': user.username,
             'token': jwt_token
         }
